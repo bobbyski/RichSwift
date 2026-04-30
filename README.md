@@ -13,7 +13,7 @@ Windows with Swift 6 or newer.
 Add RichSwift to `Package.swift`:
 
 ```swift
-.package(url: "https://github.com/your-org/RichSwift.git", from: "0.1.0")
+.package(url: "https://github.com/bobbyski/RichSift.git", from: "0.1.0")
 ```
 
 Then depend on the library target:
@@ -107,10 +107,13 @@ specialized highlighter and render it through `RichRenderable`.
 swift run richswift-demo
 ```
 
+## Documentation
+
+Detailed feature guides are available in [documentation/usage.md](documentation/usage.md).
+
 ## Current Scope
 
 RichSwift aims to be a functional Swift analogue of the most common Rich
 workflows, not a byte-for-byte port of Python internals. The core extension
 points are `RichRenderable`, `RenderContext`, `Style`, and `Segment`, so new
 renderables can plug into `Console.print` without changing the console.
-
