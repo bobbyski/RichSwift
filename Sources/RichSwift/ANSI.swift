@@ -88,6 +88,7 @@ public struct Style: Equatable, Sendable {
     public var underline: Bool
     public var strikethrough: Bool
     public var inverse: Bool
+    public var blink: Bool
 
     public init(
         foreground: Color? = nil,
@@ -97,7 +98,8 @@ public struct Style: Equatable, Sendable {
         italic: Bool = false,
         underline: Bool = false,
         strikethrough: Bool = false,
-        inverse: Bool = false
+        inverse: Bool = false,
+        blink: Bool = false
     ) {
         self.foreground = foreground
         self.background = background
@@ -107,6 +109,7 @@ public struct Style: Equatable, Sendable {
         self.underline = underline
         self.strikethrough = strikethrough
         self.inverse = inverse
+        self.blink = blink
     }
 
     public static let plain = Style()
@@ -140,6 +143,8 @@ public struct Style: Equatable, Sendable {
                 style.strikethrough = true
             case "reverse", "inverse":
                 style.inverse = true
+            case "blink":
+                style.blink = true
             default:
                 if lower.hasPrefix("on ") {
                     style.background = Color(styleToken: String(token.dropFirst(3)))
@@ -162,7 +167,8 @@ public struct Style: Equatable, Sendable {
             italic: italic || overlay.italic,
             underline: underline || overlay.underline,
             strikethrough: strikethrough || overlay.strikethrough,
-            inverse: inverse || overlay.inverse
+            inverse: inverse || overlay.inverse,
+            blink: blink || overlay.blink
         )
     }
 
@@ -173,6 +179,7 @@ public struct Style: Equatable, Sendable {
         if dim { codes.append("2") }
         if italic { codes.append("3") }
         if underline { codes.append("4") }
+        if blink { codes.append("5") }
         if inverse { codes.append("7") }
         if strikethrough { codes.append("9") }
         if let foregroundCode = foreground?.ansiCode() { codes.append(foregroundCode) }
@@ -182,4 +189,3 @@ public struct Style: Equatable, Sendable {
 }
 
 let ansiReset = "\u{001B}[0m"
-
