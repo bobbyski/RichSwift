@@ -1,16 +1,29 @@
 import Foundation
 
+/// Rendering options supplied to every `RichRenderable`.
 public struct RenderContext: Sendable {
+    /// The target terminal width in character cells.
     public var width: Int
+
+    /// The color policy to use while rendering.
     public var colorMode: ColorMode
+
+    /// Whether strings should be parsed as Rich-style markup.
     public var markup: Bool
 
+    /// Creates a rendering context.
+    ///
+    /// - Parameters:
+    ///   - width: The target terminal width. Values below `1` are clamped.
+    ///   - colorMode: Whether to emit ANSI color and style codes.
+    ///   - markup: Whether plain strings should be parsed for markup tags.
     public init(width: Int = 80, colorMode: ColorMode = .automatic, markup: Bool = true) {
         self.width = max(1, width)
         self.colorMode = colorMode
         self.markup = markup
     }
 
+    /// Whether ANSI escape sequences should be emitted for this context.
     public var colorEnabled: Bool {
         switch colorMode {
         case .disabled:
@@ -21,14 +34,25 @@ public struct RenderContext: Sendable {
     }
 }
 
+/// A value that can render itself for terminal output.
+///
+/// Conform to `RichRenderable` to make custom values printable by `Console`.
+/// Renderers receive a `RenderContext` containing width, color, and markup
+/// settings.
 public protocol RichRenderable: Sendable {
+    /// Renders the value into a terminal string.
     func render(in context: RenderContext) -> String
 }
 
+/// A contiguous run of text that shares one style.
 public struct Segment: Equatable, Sendable {
+    /// The segment's textual content.
     public var text: String
+
+    /// The style applied to `text`.
     public var style: Style
 
+    /// Creates a styled text segment.
     public init(_ text: String, style: Style = .plain) {
         self.text = text
         self.style = style
@@ -115,8 +139,14 @@ func wrapPlain(_ text: String, width: Int) -> [String] {
     return lines.isEmpty ? [""] : lines
 }
 
+/// Horizontal alignment for fixed-width rendering.
 public enum Alignment: Sendable {
+    /// Align content to the left edge.
     case left
+
+    /// Center content within the available width.
     case center
+
+    /// Align content to the right edge.
     case right
 }

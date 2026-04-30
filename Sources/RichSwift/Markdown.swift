@@ -1,12 +1,20 @@
 import Foundation
 
+/// A small dependency-free Markdown renderer for terminal output.
+///
+/// This renderer supports the common Markdown elements used in terminal status
+/// output: headings, block quotes, unordered lists, inline code, bold markers,
+/// and fenced code blocks.
 public struct Markdown: RichRenderable, Sendable {
+    /// The Markdown source text.
     public var source: String
 
+    /// Creates a Markdown renderable from source text.
     public init(_ source: String) {
         self.source = source
     }
 
+    /// Renders Markdown into styled terminal text.
     public func render(in context: RenderContext) -> String {
         var output: [String] = []
         var inCodeBlock = false

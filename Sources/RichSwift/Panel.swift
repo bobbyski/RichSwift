@@ -1,13 +1,26 @@
 import Foundation
 
+/// A bordered container for another renderable.
 public struct Panel: RichRenderable, Sendable {
+    /// The content rendered inside the panel.
     public var renderable: any RichRenderable
+
+    /// Optional label embedded in the top border.
     public var title: String?
+
+    /// Optional label embedded in the bottom border.
     public var subtitle: String?
+
+    /// Style applied to the complete rendered panel.
     public var style: Style
+
+    /// Border characters used by the panel.
     public var box: Box
+
+    /// Number of spaces inserted around content inside the panel.
     public var padding: Int
 
+    /// Creates a panel around an arbitrary renderable.
     public init(_ renderable: any RichRenderable, title: String? = nil, subtitle: String? = nil, style: Style = .plain, box: Box = .rounded, padding: Int = 1) {
         self.renderable = renderable
         self.title = title
@@ -17,10 +30,12 @@ public struct Panel: RichRenderable, Sendable {
         self.padding = max(0, padding)
     }
 
+    /// Creates a panel around a text value.
     public init(_ text: String, title: String? = nil, subtitle: String? = nil, style: Style = .plain, box: Box = .rounded, padding: Int = 1) {
         self.init(Text(text), title: title, subtitle: subtitle, style: style, box: box, padding: padding)
     }
 
+    /// Renders the panel and its nested content.
     public func render(in context: RenderContext) -> String {
         let innerWidth = max(1, context.width - 4 - padding * 2)
         let innerContext = RenderContext(width: innerWidth, colorMode: context.colorMode, markup: context.markup)
