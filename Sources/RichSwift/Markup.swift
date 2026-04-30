@@ -1,6 +1,15 @@
 import Foundation
 
+/// Parser and renderer for Rich-style inline markup.
+///
+/// Markup uses square-bracket tags such as `[bold red]Hello[/]`. Tags can be
+/// nested, and closing tags pop the most recent style from the stack.
 public enum Markup {
+    /// Parses a markup string into styled segments.
+    ///
+    /// - Parameters:
+    ///   - text: The markup text to parse.
+    ///   - baseStyle: Style applied before any tags are encountered.
     public static func parse(_ text: String, baseStyle: Style = .plain) -> [Segment] {
         var segments: [Segment] = []
         var stack: [Style] = [baseStyle]
@@ -46,22 +55,31 @@ public enum Markup {
         return segments
     }
 
+    /// Parses and renders a markup string in one step.
     public static func render(_ text: String, style: Style = .plain, colorEnabled: Bool = true) -> String {
         parse(text, baseStyle: style).render(colorEnabled: colorEnabled)
     }
 }
 
+/// A string renderable with an optional base style and markup parsing.
 public struct Text: RichRenderable, Sendable {
+    /// The source text.
     public var content: String
+
+    /// Base style applied to the text.
     public var style: Style
+
+    /// Whether `content` should be parsed for markup tags.
     public var markup: Bool
 
+    /// Creates a text renderable.
     public init(_ content: String, style: Style = .plain, markup: Bool = true) {
         self.content = content
         self.style = style
         self.markup = markup
     }
 
+    /// Renders the text using the supplied context.
     public func render(in context: RenderContext) -> String {
         if markup {
             return Markup.render(content, style: style, colorEnabled: context.colorEnabled)
@@ -69,4 +87,3 @@ public struct Text: RichRenderable, Sendable {
         return Segment(content, style: style).render(colorEnabled: context.colorEnabled)
     }
 }
-

@@ -1,11 +1,30 @@
 import Foundation
 
+/// A lightweight syntax highlighter for terminal output.
+///
+/// `Syntax` is intentionally small and dependency-free. It highlights keywords,
+/// strings, numbers, comments, and optional line numbers for a few common
+/// languages.
 public struct Syntax: RichRenderable, Sendable {
+    /// Source code to highlight.
     public var code: String
+
+    /// Language identifier, such as `"swift"`, `"python"`, or `"json"`.
     public var language: String
+
+    /// Theme used for token styles.
     public var theme: Theme
+
+    /// Whether to include a line-number gutter.
     public var lineNumbers: Bool
 
+    /// Creates a syntax-highlighted code block.
+    ///
+    /// - Parameters:
+    ///   - code: Source code to highlight.
+    ///   - language: Language identifier used to choose keywords.
+    ///   - theme: Styles used for highlighted token groups.
+    ///   - lineNumbers: Whether to include a line-number gutter.
     public init(_ code: String, language: String, theme: Theme = .default, lineNumbers: Bool = false) {
         self.code = code
         self.language = language.lowercased()
@@ -13,6 +32,7 @@ public struct Syntax: RichRenderable, Sendable {
         self.lineNumbers = lineNumbers
     }
 
+    /// Renders the highlighted code block.
     public func render(in context: RenderContext) -> String {
         let lines = code.split(separator: "\n", omittingEmptySubsequences: false).map(String.init)
         let gutterWidth = String(lines.count).count
@@ -87,13 +107,24 @@ public struct Syntax: RichRenderable, Sendable {
     ]
 }
 
+/// Style palette used by `Syntax`.
 public struct Theme: Sendable {
+    /// Style applied to language keywords.
     public var keyword: Style
+
+    /// Style applied to string literals.
     public var string: Style
+
+    /// Style applied to numeric literals.
     public var number: Style
+
+    /// Style applied to comments.
     public var comment: Style
+
+    /// Style applied to line numbers.
     public var lineNumber: Style
 
+    /// Default terminal-friendly syntax theme.
     public static let `default` = Theme(
         keyword: Style("bold magenta"),
         string: Style("green"),
@@ -102,4 +133,3 @@ public struct Theme: Sendable {
         lineNumber: Style("dim")
     )
 }
-
