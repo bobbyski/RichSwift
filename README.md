@@ -13,7 +13,7 @@ Windows with Swift 6 or newer.
 Add RichSwift to `Package.swift`:
 
 ```swift
-.package(url: "https://github.com/bobbyski/RichSift.git", from: "0.1.0")
+.package(url: "https://github.com/bobbyski/RichSwift.git", from: "0.1.0")
 ```
 
 Then depend on the library target:
