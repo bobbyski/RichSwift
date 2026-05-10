@@ -92,6 +92,12 @@ public struct Syntax: RichRenderable, Sendable {
             result += Segment(stringBuffer, style: theme.string).render(colorEnabled: colorEnabled)
         }
 
+        if let blockCommentRange = result.range(of: "/*") {
+            let before = String(result[..<blockCommentRange.lowerBound])
+            let comment = String(result[blockCommentRange.lowerBound...])
+            return before + Segment(comment, style: theme.comment).render(colorEnabled: colorEnabled)
+        }
+
         if let commentRange = result.range(of: "//") {
             let before = String(result[..<commentRange.lowerBound])
             let comment = String(result[commentRange.lowerBound...])
@@ -103,7 +109,9 @@ public struct Syntax: RichRenderable, Sendable {
     private static let keywords: [String: Set<String>] = [
         "swift": ["actor", "any", "as", "associatedtype", "await", "break", "case", "catch", "class", "continue", "defer", "do", "else", "enum", "extension", "false", "for", "func", "guard", "if", "import", "in", "init", "let", "nil", "private", "protocol", "public", "return", "self", "static", "struct", "switch", "throw", "throws", "true", "try", "var", "while"],
         "python": ["and", "as", "assert", "async", "await", "break", "class", "continue", "def", "elif", "else", "except", "false", "for", "from", "if", "import", "in", "is", "lambda", "none", "not", "or", "pass", "raise", "return", "true", "try", "while", "with", "yield"],
-        "json": ["true", "false", "null"]
+        "json": ["true", "false", "null"],
+        "css": ["background", "black", "blue", "bold", "bright", "cyan", "color", "checked", "descendant", "focus", "green", "height", "menu", "none", "on", "open", "padding", "purple", "red", "rgb", "selected", "style", "text", "white", "width", "yellow"],
+        "tcss": ["background", "black", "blue", "bold", "bright", "cyan", "color", "checked", "descendant", "focus", "green", "height", "menu", "none", "on", "open", "padding", "purple", "red", "rgb", "selected", "style", "text", "white", "width", "yellow"]
     ]
 }
 
